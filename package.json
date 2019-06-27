@@ -1,0 +1,28 @@
+{
+  "name": "react-table-inline-editing",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "faker": "4.1.0",
+    "lodash": "4.17.11",
+    "react": "16.4.2",
+    "react-bootstrap": "0.32.4",
+    "react-dom": "16.4.2",
+    "react-redux": "5.0.7",
+    "react-scripts": "1.1.4",
+    "react-table": "6.8.6",
+    "recompose": "0.30.0",
+    "redux": "4.0.0",
+    "redux-form": "7.4.2",
+    "redux-logger": "3.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
