@@ -1,18 +1,31 @@
-import React from "react";
-import set from "lodash/fp/set";
-import { Field } from "redux-form";
-import Table from "react-table";
-import * as BS from "react-bootstrap";
-import initialData from "./dataFactory";
-import FormProvider from "./FormProvider";
-import { avatarColumnProps } from "./AvatarCell";
-import ActionsCell from "./ActionsCell";
-import HighlightCell from "./HighlightCell";
-import GridFilters from "./GridFilters";
-import faker from "faker"
+import React from "react"
+import set from "lodash/fp/set"
+import { Field } from "redux-form"
+import Table from "react-table"
+import * as BS from "react-bootstrap"
+import FormProvider from "./FormProvider"
+import ActionsCell from "./ActionsCell"
+import HighlightCell from "./HighlightCell"
+import GridFilters from "./GridFilters"
+import axios from 'axios'
+
+const server = 'http://localhost:3005'
 
 export default class App extends React.Component {
-  state = { data: initialData, editing: null };
+  constructor() {
+    super()
+    this.state = { data: [], editing: null}
+  }
+
+  componentDidMount() {
+    this.load()
+  }
+
+  load() {
+    axios.get(this.request(`/load`))
+      .then(response => this.setState({ data: response.data }))
+      .catch(error => console.log(`unable to load data, sorry: ${error.toString()}`))
+  }
 
   editableComponent = ({ input, editing, value, ...rest }) => {
     const Component = editing ? BS.FormControl : BS.FormControl.Static;
@@ -56,28 +69,34 @@ export default class App extends React.Component {
     { Header: "Name", accessor: "name", ...this.editableColumnProps },
     { Header: "Email", accessor: "email", ...this.editableColumnProps },
     { Header: "Phone", accessor: "phone", ...this.editableColumnProps }
-  ];
+  ]
+
+
+  request(path) {
+    return `${server}${path}`
+  }
+
+  save(people) {
+    axios.post(this.request(`/save`), people)
+      .then(() => console.log('data saved'))
+      .catch(error => console.log(`unable to save data, sorry: ${error.toString()}`))
+  }
 
   addNew = () => {
     const person = {
-      // id: this.state.data.length + 1,
-      email: 'AAABenny@Jets.com', // randomPerson.email,
-      phone: '0-776-420-9999', // randomPerson.phone,
-      name: 'Aaabacab' // randomPerson.name
+      email: 'AAABenny@Jets.com',
+      phone: '0-776-420-9999',
+      name: 'Aaabacab'
     }
     const newPeople = [...this.state.data, person].sort(
       (a, b) => a.email < b.email ? -1 : 1)
 
-    this.setState({ data: newPeople })
-//   const person = { id: i, ...faker.helpers.contextualCard() }
-//   console.log(person.name,person.email,person.phone)
-//   data.push(person)
-// }
+    this.save(newPeople)
 
+    this.setState({ data: newPeople })
   }
 
   handleSubmit = values => {
-    console.log("handle submit!")
     this.setState(state => {
       const index = this.state.data.indexOf(this.state.editing);
       return {
@@ -89,7 +108,7 @@ export default class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <h1>react-table inline editing</h1>
+        <h1>Users</h1>
         <BS.Panel bsStyle="primary">
           <BS.Panel.Heading>
             <BS.Clearfix>
@@ -113,7 +132,7 @@ export default class App extends React.Component {
                     defaultPageSize={5}
                   />
                 </form>
-              );
+              )
             }}
           </FormProvider>
         </BS.Panel>
