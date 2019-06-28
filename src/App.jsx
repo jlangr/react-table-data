@@ -14,11 +14,8 @@ const server = 'http://localhost:3005'
 export default class App extends React.Component {
   constructor() {
     super()
-    this.state = { data: [], editing: null}
-  }
-
-  componentDidMount() {
     this.load()
+    this.state = { editing: null}
   }
 
   load() {
@@ -92,18 +89,19 @@ export default class App extends React.Component {
       (a, b) => a.email < b.email ? -1 : 1)
 
     this.save(newPeople)
-
     this.setState({ data: newPeople })
   }
 
   handleSubmit = values => {
     this.setState(state => {
       const index = this.state.data.indexOf(this.state.editing);
-      return {
+      const result = {
         data: set(`[${index}]`, values, state.data)
-      };
-    });
-  };
+      }
+      this.save(result.data)
+      return result
+    })
+  }
 
   render() {
     return (
