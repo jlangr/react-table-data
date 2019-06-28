@@ -1,9 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import "react-table/react-table.css";
-import store from "./store";
-import App from "./App";
+import "@babel/polyfill"
+import React from "react"
+import ReactDOM from "react-dom"
+import { Provider } from "react-redux"
+import "react-table/react-table.css"
+import store from "./store"
+import App from "./App"
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
